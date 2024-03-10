@@ -23,6 +23,8 @@ contract ServiceManager {
         uint256 index;
     }
 
+    event RegisteredServiceProvider(address indexed owner);
+
     function createNewServiceProvider(
         string memory _companyName, 
         string memory _email, 
@@ -40,6 +42,14 @@ contract ServiceManager {
             serviceCategory: _serviceCategory,
             index: serviceProvidersIndexes.length - 1
         });
+
+        emit RegisteredServiceProvider(msg.sender);
+    }
+
+    function getServiceProvider(address _address) external view returns (ServiceProvider memory) {
+        require(serviceProvidersIndexes.length > 0, "No service providers");
+        require(serviceProvidersIndexes[serviceProviders[_address].index] == _address, "Service provider does not exist");
+        return serviceProviders[_address];
     }
 
     function getServiceProviders() external view returns (string[] memory) {
