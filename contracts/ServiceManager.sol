@@ -52,7 +52,14 @@ contract ServiceManager {
         return serviceProviders[_address];
     }
 
-    function getServiceProviders() external view returns (string[] memory) {
+    function getServiceProviders() external view returns (ServiceProvider[] memory) {
+    ServiceProvider[] memory validServiceProviders = new ServiceProvider[](serviceProvidersIndexes.length);
 
+    for(uint256 i = 0; i < serviceProvidersIndexes.length; i++) {
+        address currentAddress = serviceProvidersIndexes[i];
+        validServiceProviders[i] = serviceProviders[currentAddress];
+    }
+
+    return validServiceProviders;
     }
 }
