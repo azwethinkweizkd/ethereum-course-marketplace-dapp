@@ -143,4 +143,110 @@ describe("ServiceManager", async () => {
             expect(value.length).to.equal(0);
         });
     });
+    describe("Service Agreements", async () => {
+        let retrieved;
+
+        beforeEach(async () => {
+            await instance
+                .connect(provider)
+                .createNewServiceProvider(
+                    serviceProvider1.companyName,
+                    serviceProvider1.email,
+                    serviceProvider1.phone,
+                    serviceProvider1.serviceAmount,
+                    serviceProvider1.serviceCategory
+                );
+
+            [retrieved] = await instance
+                .connect(client)
+                .getServiceProvider(provider.address);
+        });
+
+        it("should create a new ServiceAgreement between Provider and client", async () => {
+            await instance.connect(client).createServiceAgreement(retrieved);
+
+            const clientAgreements = await instance.getClientServiceAgreements(
+                client.address
+            );
+            const providerAgreements =
+                await instance.getProviderServiceAgreements(provider.address);
+
+            expect(clientAgreements.length).to.be.equal(1);
+            expect(providerAgreements.length).to.be.equal(1);
+        });
+
+        it("should allow for the retrieval of all client and provider service agreements", async () => {
+            await instance.connect(client).createServiceAgreement(retrieved);
+
+            const clientAgreements = await instance.getClientServiceAgreements(
+                client.address
+            );
+            const providerAgreements =
+                await instance.getProviderServiceAgreements(provider.address);
+
+            expect(clientAgreements.length).to.be.equal(1);
+            expect(providerAgreements.length).to.be.equal(1);
+        });
+
+        it("create new service agreement emits NewAgreement event", async () => {
+            const tx = await instance
+                .connect(client)
+                .createServiceAgreement(retrieved);
+
+            const agreementAddresses = await instance
+                .connect(provider)
+                .getProviderServiceAgreements(provider.address);
+
+            expect(tx)
+                .to.emit(instance, "NewAgreement")
+                .withArgs(
+                    client.address,
+                    provider.address,
+                    agreementAddresses[0]
+                );
+        });
+    });
+
+    describe("ServiceManager Service Agreement Errors", async () => {
+        let retrieved, amount, tx;
+
+        beforeEach(async () => {
+            await instance
+                .connect(provider)
+                .createNewServiceProvider(
+                    serviceProvider1.companyName,
+                    serviceProvider1.email,
+                    serviceProvider1.phone,
+                    ethers.utils.parseUnits("20000", "ether"),
+                    serviceProvider1.serviceCategory
+                );
+
+            [retrieved, , , , , amount] = await instance
+                .connect(client)
+                .getServiceProvider(provider.address);
+        });
+
+        it("should not allow providers to create agreements with themselves", async () => {
+            try {
+                await instance
+                    .connect(provider)
+                    .createServiceAgreement(retrieved);
+            } catch (err) {
+                expect(
+                    err.message.match(
+                        /Provider cannot create service agreement with themselves/
+                    )
+                ).to.be.ok;
+            }
+        });
+        it("should not allow agreement for less than the specified service amount", async () => {
+            try {
+                await instance
+                    .connect(client)
+                    .createServiceAgreement(retrieved);
+            } catch (err) {
+                expect(err.message.match(/Insufficient funds/)).to.be.ok;
+            }
+        });
+    });
 });
