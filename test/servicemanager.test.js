@@ -32,7 +32,7 @@ describe("ServiceManager", async () => {
             expect(receipt.status).to.equal(1);
         });
 
-        it("emits an event including provider address on creation of a new serive provider", async () => {
+        it("emits an event including provider address on creation of a new serve provider", async () => {
             expect(
                 await instance
                     .connect(provider)
@@ -163,48 +163,56 @@ describe("ServiceManager", async () => {
         });
 
         it("should create a new ServiceAgreement between Provider and client", async () => {
-            await instance.connect(client).createServiceAgreement(retrieved);
-
-            const clientAgreements = await instance.getClientServiceAgreements(
-                client.address
-            );
-            const providerAgreements =
-                await instance.getProviderServiceAgreements(provider.address);
-
-            expect(clientAgreements.length).to.be.equal(1);
-            expect(providerAgreements.length).to.be.equal(1);
-        });
-
-        it("should allow for the retrieval of all client and provider service agreements", async () => {
-            await instance.connect(client).createServiceAgreement(retrieved);
-
-            const clientAgreements = await instance.getClientServiceAgreements(
-                client.address
-            );
-            const providerAgreements =
-                await instance.getProviderServiceAgreements(provider.address);
-
-            expect(clientAgreements.length).to.be.equal(1);
-            expect(providerAgreements.length).to.be.equal(1);
-        });
-
-        it("create new service agreement emits NewAgreement event", async () => {
             const tx = await instance
                 .connect(client)
                 .createServiceAgreement(retrieved);
+            const receipt = await tx.wait();
+            expect(receipt.status).to.equal(1);
 
-            const agreementAddresses = await instance
-                .connect(provider)
-                .getProviderServiceAgreements(provider.address);
+            const clientAgreements = await instance.getClientServiceAgreements(
+                client.address
+            );
 
-            expect(tx)
-                .to.emit(instance, "NewAgreement")
-                .withArgs(
-                    client.address,
-                    provider.address,
-                    agreementAddresses[0]
-                );
+            const providerAgreements =
+                await instance.getProviderServiceAgreements(provider.address);
+
+            expect(clientAgreements.length).to.equal(1);
+            expect(providerAgreements.length).to.equal(1);
         });
+
+        it("Should allow for the retrieval of all client and provider service agreements", async () => {
+            let clientAgreements, providerAgreements;
+
+            clientAgreements = await instance.getClientServiceAgreements(
+                client.address
+            );
+
+            providerAgreements = await instance.getProviderServiceAgreements(
+                provider.address
+            );
+
+            expect(clientAgreements.length).to.equal(0);
+            expect(providerAgreements.length).to.equal(0);
+
+            await instance.connect(client).createServiceAgreement(retrieved);
+
+            clientAgreements = await instance.getClientServiceAgreements(
+                client.address
+            );
+
+            providerAgreements = await instance.getProviderServiceAgreements(
+                provider.address
+            );
+
+            expect(clientAgreements.length).to.equal(1);
+            expect(providerAgreements.length).to.equal(1);
+        });
+
+        it("Create new service agreement emits NewAgreement event", async () => {
+            const tx = await instance.connect().createServiceAgreement(retrieved);
+            const agreementAddress = await instance.connect(provider).getProviderServiceAgreements(provicder.address);
+            expect(tx).to.emit(instance, "NewAgreement").withArgs(client.address, provider.address, agreementAddress[0]);
+        })
     });
 
     describe("ServiceManager Service Agreement Errors", async () => {

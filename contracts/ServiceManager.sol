@@ -85,7 +85,7 @@ contract ServiceManager {
             address[] storage ca = clientAgreements[msg.sender];
             ca.push(agreementAddress);
             
-            address[] storage pa = clientAgreements[_provider];
+            address[] storage pa = providerAgreements[_provider];
             pa.push(agreementAddress);
 
             emit NewAgreement(msg.sender, _provider, agreementAddress);
@@ -94,7 +94,13 @@ contract ServiceManager {
         } catch (bytes memory reason) {
             emit ErrorNoticeBytes(reason);
         }
+    }
 
-        
+    function getClientServiceAgreements(address _clientAddress) external view returns(address[] memory) {
+        return clientAgreements[_clientAddress];
+    }
+
+    function getProviderServiceAgreements(address _providerAddress) external view returns(address[] memory) {
+        return providerAgreements[_providerAddress];
     }
 }
