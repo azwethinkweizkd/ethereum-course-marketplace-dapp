@@ -209,10 +209,20 @@ describe("ServiceManager", async () => {
         });
 
         it("Create new service agreement emits NewAgreement event", async () => {
-            const tx = await instance.connect().createServiceAgreement(retrieved);
-            const agreementAddress = await instance.connect(provider).getProviderServiceAgreements(provicder.address);
-            expect(tx).to.emit(instance, "NewAgreement").withArgs(client.address, provider.address, agreementAddress[0]);
-        })
+            const tx = await instance
+                .connect(client)
+                .createServiceAgreement(retrieved);
+            const agreementAddress = await instance
+                .connect(provider)
+                .getProviderServiceAgreements(provider.address);
+            expect(tx)
+                .to.emit(instance, "NewAgreement")
+                .withArgs(
+                    client.address,
+                    provider.address,
+                    agreementAddress[0]
+                );
+        });
     });
 
     describe("ServiceManager Service Agreement Errors", async () => {
