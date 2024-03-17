@@ -1,21 +1,19 @@
 import { Routes, Route } from "react-router-dom";
-import "./App.scss";
-import DashboardPage from "./features/dashboard/components/DashboardPage";
-import Header from "./features/header/components/Header";
-import Footer from "./features/footer/components/Footer";
+import DashboardPage from "./routes/dashboard/DashboardPage";
+import Header from "./components/header/Header";
+import Footer from "./components/footer/Footer";
+import { Box } from "@chakra-ui/layout";
 
 const App = () => (
-    <div className="App">
-        <div className="layout">
-            <Header />
-            <main>
-                <Routes>
-                    <Route exact path="/" component={DashboardPage} />
-                </Routes>
-            </main>
-            <Footer />
-        </div>
-    </div>
+	<div className="App" style={{ height: "100vh" }}>
+		<Header />
+		<Box as="main" h="100%">
+			<Routes>
+				<Route exact path="/" element={<DashboardPage />} />
+			</Routes>
+		</Box>
+		<Footer />
+	</div>
 );
 
 export default App;
