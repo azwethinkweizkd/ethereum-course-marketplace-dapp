@@ -1,9 +1,15 @@
-import React from "react";
+import React, { createContext, useState, useContext } from "react";
 
-const walletProvider = React.createContext({
-    wallet: {
-        accounts: []
-    },
-    setWallet: () => {}
-});
-export default walletProvider;
+const WalletContext = createContext();
+
+export const useWallet = () => useContext(WalletContext);
+
+export const WalletProvider = ({ children }) => {
+	const [wallet, setWallet] = useState(null);
+
+	return (
+		<WalletContext.Provider value={{ wallet, setWallet }}>
+			{children}
+		</WalletContext.Provider>
+	);
+};
