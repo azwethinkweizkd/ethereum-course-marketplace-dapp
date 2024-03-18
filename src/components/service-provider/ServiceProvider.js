@@ -17,7 +17,7 @@ import { IoBusiness } from "react-icons/io5";
 import { FaEthereum, FaBusinessTime } from "react-icons/fa";
 import YesNoModal from "./YesNoModal";
 
-const ServiceProvider = ({ provider }) => {
+const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
 	const {
 		companyName,
 		email,
@@ -28,6 +28,11 @@ const ServiceProvider = ({ provider }) => {
 	} = provider;
 
 	const { isOpen, onOpen, onClose } = useDisclosure();
+
+	const onContractAgreement = async () => {
+		onClose();
+		await handleContractAgreement(provider);
+	};
 
 	return (
 		<WrapItem>
@@ -71,13 +76,15 @@ const ServiceProvider = ({ provider }) => {
 								width="100%"
 								colorScheme="yellow"
 								fontSize="xl"
-								onClick={onOpen}>
+								onClick={onOpen}
+								isDisabled={loading}>
 								Contract
 							</Button>
 
 							<YesNoModal
 								open={isOpen}
 								onClose={onClose}
+								onYesClick={onContractAgreement}
 								headerText="Confirm contract agreement"
 								bodyText={`Are you sure you want to contract 
 											${companyName} for the amount of ${serviceCost} (Wei)? 
@@ -93,6 +100,8 @@ const ServiceProvider = ({ provider }) => {
 
 ServiceProvider.propTypes = {
 	provider: PropTypes.object.isRequired,
+	handleContractAgreement: PropTypes.func.isRequired,
+	loading: PropTypes.bool.isRequired,
 };
 
 export default ServiceProvider;

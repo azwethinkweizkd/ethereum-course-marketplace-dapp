@@ -86,6 +86,15 @@ const ethereumApiFactory = (web3Provider) => {
 		return formatterServiceProviders;
 	};
 
+	const createServiceAgreement = async (providerAddress) => {
+		const contract = getContractWriter(
+			serviceManagerContractAddress,
+			serviceManagerAbi
+		);
+
+		return await contract.createServiceAgreement(providerAddress);
+	};
+
 	const parseUints = (value, denomination) => {
 		return ethers.utils.parseUnits(value, denomination);
 	};
@@ -127,6 +136,7 @@ const ethereumApiFactory = (web3Provider) => {
 		getContractReader,
 		getServiceProvider,
 		getServiceProviders,
+		createServiceAgreement,
 		provider,
 		signer,
 	};
