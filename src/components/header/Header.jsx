@@ -6,6 +6,7 @@ import {
 	useToast,
 	Button,
 	Text,
+	Box,
 } from "@chakra-ui/react";
 import MetaMaskOnboarding from "@metamask/onboarding";
 import {
@@ -119,7 +120,17 @@ export default function Header() {
 	};
 
 	return (
-		<header>
+		<Box
+			as="header"
+			boxShadow="dark-lg"
+			backgroundColor="white"
+			width="fit-content"
+			pr={6}
+			pl={4}
+			py={2}
+			borderBottomRightRadius={36}
+			borderRight="solid"
+			borderRightColor="black">
 			<HStack as="nav">
 				<ChakraLink as={ReactRouterLink} to="/">
 					Home
@@ -149,6 +160,6 @@ export default function Header() {
 					</Button>
 				)}
 			</HStack>
-		</header>
+		</Box>
 	);
 }
