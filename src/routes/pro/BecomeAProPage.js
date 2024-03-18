@@ -108,14 +108,14 @@ const BecomeAProPage = () => {
 			return await provider.getBlockNumber();
 		};
 
-		if (wallet && wallet.accounts.length > 0) {
+		if (wallet && wallet?.accounts.length > 0) {
 			const contract = ethereumApi.current.getContractReader(
 				contractAddress1,
 				abi
 			);
 
 			const filter = contract?.filters.RegisteredServiceProvider(
-				wallet.accounts[0]
+				wallet?.accounts[0]
 			);
 
 			getBlockNumber().then((blockNumber) => {
