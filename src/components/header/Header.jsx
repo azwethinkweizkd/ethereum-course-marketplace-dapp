@@ -87,7 +87,7 @@ export default function Header() {
 
 	useEffect(() => {
 		if (MetaMaskOnboarding.isMetaMaskInstalled()) {
-			if (wallet && wallet.accounts && wallet.accounts.length > 0) {
+			if (wallet && wallet?.accounts && wallet?.accounts.length > 0) {
 				setMetamaskButtonDetails({
 					buttonDisabled: true,
 					buttonText: METAMASK_CONNECTED_TEXT,

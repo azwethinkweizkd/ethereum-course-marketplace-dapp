@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { v4 as uuid } from "uuid";
 import ServiceProvider from "../../components/service-provider/ServiceProvider";
-import { Center, useToast } from "@chakra-ui/react";
+import { Wrap, useToast } from "@chakra-ui/react";
 import { useQuery } from "../shared/hooks/userQuery";
 import { useWallet } from "../../common/context/walletProvider";
 import ethereumApiFactory from "../../ethereum/ethereumApiFactory";
@@ -46,7 +46,7 @@ const ServiceProvidersPage = () => {
 	}, [category, searchCriteria]);
 
 	useEffect(() => {
-		if (!wallet?.accounts || !wallet.accounts.length) return;
+		if (!wallet?.accounts || !wallet?.accounts.length) return;
 
 		try {
 			ethereumApi.current = ethereumApiFactory(window.ethereum);
@@ -59,22 +59,22 @@ const ServiceProvidersPage = () => {
 			updateServiceProviders();
 		} catch (error) {
 			toast({
-				title: "Error searching for services",
+				title: null,
 				description: "There was an error while searching for services",
 				status: "error",
 				duration: 9000,
 				isClosable: true,
 			});
 		}
-	}, [wallet.accounts, toast, updateServiceProviders]);
+	}, [wallet?.accounts, toast, updateServiceProviders]);
 
 	return (
-		<Center>
+		<Wrap mt={12} spacing={24} justify="center">
 			{serviceProviders.length > 0 &&
 				serviceProviders.map((sp) => (
 					<ServiceProvider provider={sp} key={uuid()} />
 				))}
-		</Center>
+		</Wrap>
 	);
 };
 
