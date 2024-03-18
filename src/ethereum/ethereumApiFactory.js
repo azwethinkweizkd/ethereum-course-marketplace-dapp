@@ -55,6 +55,37 @@ const ethereumApiFactory = (web3Provider) => {
 		);
 	};
 
+	const getServiceProviders = async () => {
+		const contractReader = getContractReader(
+			serviceManagerContractAddress,
+			serviceManagerAbi
+		);
+
+		const serviceProviders = await contractReader.getServiceProviders();
+
+		const formatterServiceProviders = serviceProviders.map((sp) => {
+			const [
+				ownerAddress,
+				companyName,
+				email,
+				phone,
+				serviceCost,
+				serviceCategory,
+			] = sp;
+
+			return getFormattedServiceProvider(
+				ownerAddress,
+				companyName,
+				email,
+				phone,
+				serviceCost,
+				serviceCategory
+			);
+		});
+
+		return formatterServiceProviders;
+	};
+
 	const parseUints = (value, denomination) => {
 		return ethers.utils.parseUnits(value, denomination);
 	};
@@ -95,6 +126,7 @@ const ethereumApiFactory = (web3Provider) => {
 		getContractWriter,
 		getContractReader,
 		getServiceProvider,
+		getServiceProviders,
 		provider,
 		signer,
 	};

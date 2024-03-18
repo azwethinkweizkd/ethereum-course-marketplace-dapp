@@ -7,7 +7,7 @@ import {
 	Heading,
 	Text,
 } from "@chakra-ui/react";
-import { PhoneIcon, AtSignIcon } from "@chakra-ui/icons";
+import { PhoneIcon } from "@chakra-ui/icons";
 
 const ProService = ({ service }) => {
 	const {

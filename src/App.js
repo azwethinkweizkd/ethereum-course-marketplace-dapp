@@ -5,6 +5,7 @@ import Footer from "./components/footer/Footer";
 import DashboardPage from "./routes/dashboard/DashboardPage";
 import BecomeAProPage from "./routes/pro/BecomeAProPage";
 import ProServicesPage from "./routes/services/ProServicesPage";
+import ServiceProvidersPage from "./routes/serviceProviders/ServiceProvidersPage";
 
 const App = () => (
 	<div
@@ -16,6 +17,11 @@ const App = () => (
 				<Route exact path="/" element={<DashboardPage />} />
 				<Route exact path="/pro" element={<BecomeAProPage />} />
 				<Route exact path="/my-services" element={<ProServicesPage />} />
+				<Route
+					exact
+					path="/service-providers"
+					element={<ServiceProvidersPage />}
+				/>
 			</Routes>
 		</Box>
 		<Footer />
