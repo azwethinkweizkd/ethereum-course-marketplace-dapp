@@ -6,6 +6,7 @@ import DashboardPage from "./routes/dashboard/DashboardPage";
 import BecomeAProPage from "./routes/pro/BecomeAProPage";
 import ProServicesPage from "./routes/services/ProServicesPage";
 import ServiceProvidersPage from "./routes/serviceProviders/ServiceProvidersPage";
+import ClientContractsPage from "./routes/serviceContracts/ClientContractsPage";
 
 const App = () => (
 	<div
@@ -21,6 +22,11 @@ const App = () => (
 					exact
 					path="/service-providers"
 					element={<ServiceProvidersPage />}
+				/>
+				<Route
+					exact
+					path="/service-contracts"
+					element={<ClientContractsPage />}
 				/>
 			</Routes>
 		</Box>

@@ -9,4 +9,6 @@ export const CLIENT_WAITING_FOR_APPROVAL = 0;
 export const CLIENT_APPROVED = 1;
 export const CLIENT_UNAPPROVED = 2;
 export const GENERAL_TRANSACTIONAL_ERROR =
-    "There the transaction, please try again";
+	"There the transaction, please try again";
+export const CONTRACTS = "contracts";
+export const AGREEMENTS = "agreements";

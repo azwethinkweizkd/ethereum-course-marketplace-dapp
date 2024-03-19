@@ -4,7 +4,12 @@ import {
 	contractAddress1 as serviceManagerContractAddress,
 } from "./serviceManagerContract";
 import ethersProvider from "./ethereumProvider";
-import { serviceCategories } from "../common/constants";
+import {
+	serviceCategories,
+	agreementStatuses,
+	clientApprovalStatuses,
+} from "../common/constants";
+import { abi as serviceAgreementAbi } from "./serviceAgreementContract";
 
 const ethereumApiFactory = (web3Provider) => {
 	const { getContractReader, getContractWriter, provider, signer } =
@@ -95,6 +100,53 @@ const ethereumApiFactory = (web3Provider) => {
 		return await contract.createServiceAgreement(providerAddress);
 	};
 
+	const getClientServiceAgreements = async (address) => {
+		const contract = getContractReader(
+			serviceManagerContractAddress,
+			serviceManagerAbi
+		);
+
+		return await contract.getClientServiceAgreements(address);
+	};
+
+	const getProviderServiceAgreements = async (address) => {
+		const contract = getContractReader(
+			serviceManagerContractAddress,
+			serviceManagerAbi
+		);
+
+		return await contract.getProviderServiceAgreements(address);
+	};
+
+	const getServiceAgreementDetails = async (address) => {
+		const contract = getContractReader(address, serviceAgreementAbi);
+
+		const [
+			clientAddress,
+			providerAddress,
+			contractBalance,
+			agreementStatus,
+			clientApprovalStatus,
+			clientRating,
+			agreementFulfilledOrNullified,
+			termsAmount,
+		] = await contract.getAgreementDetails();
+
+		return {
+			agreementAddress: address,
+			clientAddress,
+			providerAddress,
+			contractBalance: ethers.utils.formatUnits(contractBalance, "ether"),
+			agreementStatus: agreementStatuses[agreementStatus],
+			agreementStatusKey: agreementStatus,
+			clientApprovalStatus: clientApprovalStatuses[clientApprovalStatus],
+			clientApprovalStatusKey: clientApprovalStatus,
+			clientRating,
+			agreementFulfilledOrNullified,
+			termsAmount: ethers.utils.formatUnits(termsAmount, "ether"),
+		};
+	};
+
 	const parseUints = (value, denomination) => {
 		return ethers.utils.parseUnits(value, denomination);
 	};
@@ -137,6 +189,9 @@ const ethereumApiFactory = (web3Provider) => {
 		getServiceProvider,
 		getServiceProviders,
 		createServiceAgreement,
+		getClientServiceAgreements,
+		getProviderServiceAgreements,
+		getServiceAgreementDetails,
 		provider,
 		signer,
 	};
