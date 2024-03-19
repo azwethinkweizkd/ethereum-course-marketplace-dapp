@@ -14,6 +14,7 @@ import { abi as serviceAgreementAbi } from "./serviceAgreementContract";
 const ethereumApiFactory = (web3Provider) => {
 	const { getContractReader, getContractWriter, provider, signer } =
 		ethersProvider(web3Provider);
+
 	const createNewServiceProvider = async (
 		companyName,
 		email,
@@ -130,7 +131,9 @@ const ethereumApiFactory = (web3Provider) => {
 			clientRating,
 			agreementFulfilledOrNullified,
 			termsAmount,
-		] = await contract.getAgreementDetails();
+		] = await contract.getAgreementDetails({
+			gasLimit: 0,
+		});
 
 		return {
 			agreementAddress: address,
@@ -145,6 +148,30 @@ const ethereumApiFactory = (web3Provider) => {
 			agreementFulfilledOrNullified,
 			termsAmount: ethers.utils.formatUnits(termsAmount, "ether"),
 		};
+	};
+
+	const depositFundsInContract = async (address, overrides) => {
+		const contract = getContractWriter(address, serviceAgreementAbi);
+
+		return await contract.deposit(overrides);
+	};
+
+	const updateClientApprovalStatus = async (address, approval) => {
+		const contract = getContractWriter(address, serviceAgreementAbi);
+
+		return contract.updateClientApprovalStatus(approval);
+	};
+
+	const rateServiceProvider = async (address, value) => {
+		const contract = getContractWriter(address, serviceAgreementAbi);
+
+		return await contract.rateServiceProvider(value);
+	};
+
+	const issueRefundToClient = async (address) => {
+		const contract = getContractWriter(address, serviceAgreementAbi);
+
+		return await contract.refund(address);
 	};
 
 	const parseUints = (value, denomination) => {
@@ -181,17 +208,26 @@ const ethereumApiFactory = (web3Provider) => {
 			  }`;
 	};
 
+	function parseEther(value) {
+		return ethers.utils.parseEther(value);
+	}
+
 	return {
 		createNewServiceProvider,
-		parseUints,
+		createServiceAgreement,
 		getContractWriter,
 		getContractReader,
 		getServiceProvider,
 		getServiceProviders,
-		createServiceAgreement,
 		getClientServiceAgreements,
 		getProviderServiceAgreements,
 		getServiceAgreementDetails,
+		updateClientApprovalStatus,
+		rateServiceProvider,
+		depositFundsInContract,
+		issueRefundToClient,
+		parseUints,
+		parseEther,
 		provider,
 		signer,
 	};

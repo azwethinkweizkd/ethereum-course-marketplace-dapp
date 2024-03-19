@@ -4,7 +4,7 @@ import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import DashboardPage from "./routes/dashboard/DashboardPage";
 import BecomeAProPage from "./routes/pro/BecomeAProPage";
-import ProServicesPage from "./routes/services/ProServicesPage";
+import ProServicesPage from "./routes/services-page/ProServicesPage";
 import ServiceProvidersPage from "./routes/serviceProviders/ServiceProvidersPage";
 import ClientContractsPage from "./routes/serviceContracts/ClientContractsPage";
 
