@@ -9,7 +9,7 @@ const ProServicesPage = () => {
 	const [services, setServices] = useState([]);
 	const { wallet } = useWallet();
 	const toast = useToast();
-	console.log(services);
+
 	const loadServices = useCallback(
 		async (account) => {
 			try {

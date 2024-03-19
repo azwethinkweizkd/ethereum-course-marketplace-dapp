@@ -9,9 +9,12 @@ import {
 	Tag,
 	useToast,
 } from "@chakra-ui/react";
+import Placeholder from "../placeholder/Placeholder";
 import ethereumApiFactory from "../../ethereum/ethereumApiFactory";
 import { useWallet } from "../../common/context/walletProvider";
 import { AGREEMENTS, CONTRACTS } from "../../common/constants";
+import PropTypes from "prop-types";
+import { uniqueId } from "lodash";
 
 function ServiceAgreementsHoc(ContextComponent, context) {
 	function ServiceAgreementsPage() {
@@ -45,7 +48,7 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 					console.error("Unsupported context:", context);
 					break;
 			}
-			setReload(true);
+
 			setServiceAgreements(addresses);
 		}, [wallet?.accounts]);
 
@@ -120,31 +123,85 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 		const panes = [
 			{
 				menuItem: (
-					<Tab key="active">
+					<Tab
+						key="active"
+						fontSize="lg"
+						fontWeight="700"
+						backgroundColor="white">
 						Active
-						<Tag variant="solid" colorScheme="teal" rounded="full">
+						<Tag
+							variant="solid"
+							colorScheme="teal"
+							rounded="full"
+							textAlign="center"
+							py={2.5}
+							px={4}
+							mx={2}
+							fontSize="lg"
+							fontWeight="700">
 							{activeServiceAgreements.length}
 						</Tag>
 					</Tab>
 				),
-				render: () => <TabPanel key="active" _active={true}></TabPanel>,
+				render: () => (
+					<TabPanel key="active" _active={true}>
+						{activeServiceAgreements.length ? (
+							activeServiceAgreements.map((sa) => (
+								<ContextComponent
+									setReload={setReload}
+									agreement={sa}
+									key={uniqueId}
+								/>
+							))
+						) : (
+							<Placeholder state="open" />
+						)}
+					</TabPanel>
+				),
 			},
 			{
 				menuItem: (
-					<Tab key="closed">
+					<Tab
+						key="closed"
+						fontSize="lg"
+						fontWeight="700"
+						backgroundColor="white">
 						Closed
-						<Tag variant="solid" colorScheme="teal" rounded="full">
+						<Tag
+							variant="solid"
+							colorScheme="teal"
+							rounded="full"
+							textAlign="center"
+							py={2.5}
+							px={4}
+							mx={2}
+							fontSize="lg"
+							fontWeight="700">
 							{closedServiceAgreements.length}
 						</Tag>
 					</Tab>
 				),
-				render: () => <TabPanel key="closed"></TabPanel>,
+				render: () => (
+					<TabPanel key="closed">
+						{closedServiceAgreements.length ? (
+							closedServiceAgreements.map((sa) => (
+								<ContextComponent
+									setReload={setReload}
+									agreement={sa}
+									key={uniqueId}
+								/>
+							))
+						) : (
+							<Placeholder state="closed" />
+						)}
+					</TabPanel>
+				),
 			},
 		];
 
 		return (
 			<Box width="75%" mx="auto" mt={12}>
-				<Tabs>
+				<Tabs variant="enclosed">
 					<TabList>{panes.map((pane) => pane.menuItem)}</TabList>
 					<TabPanels>{panes.map((pane) => pane.render())}</TabPanels>
 				</Tabs>
@@ -154,5 +211,10 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 
 	return ServiceAgreementsPage;
 }
+
+ServiceAgreementsHoc.propTypes = {
+	ContextComponent: PropTypes.func.isRequired,
+	context: PropTypes.string.isRequired,
+};
 
 export default ServiceAgreementsHoc;

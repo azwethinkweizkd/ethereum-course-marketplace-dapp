@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { InputGroup, Input, InputRightElement } from "@chakra-ui/input";
 import { SearchIcon } from "@chakra-ui/icons";
-import SearchCategory from "./SearchCategory";
+import SearchCategory from "../../components/search-category/SearchCategory";
 import { Center, Heading, VStack, Box, HStack } from "@chakra-ui/layout";
 import { serviceCategories } from "../../common/constants/objects";
 
