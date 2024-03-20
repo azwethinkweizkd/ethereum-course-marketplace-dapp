@@ -9,6 +9,7 @@ import {
 	Tag,
 	useToast,
 } from "@chakra-ui/react";
+import useEthereum from "../../routes/shared/hooks/useEthereum";
 import Placeholder from "../placeholder/Placeholder";
 import ethereumApiFactory from "../../ethereum/ethereumApiFactory";
 import { useWallet } from "../../common/context/walletProvider";
@@ -23,7 +24,7 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 		const [serviceAgreements, setServiceAgreements] = useState([]);
 		const [reload, setReload] = useState(false);
 
-		const ethereumApi = useRef({});
+		const ethereumApi = useEthereum();
 
 		const toast = useToast();
 
@@ -50,27 +51,30 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 			}
 
 			setServiceAgreements(addresses);
-		}, [wallet?.accounts]);
+		}, [wallet?.accounts, ethereumApi]);
 
-		const getServiceAgreementDetails = useCallback(async (addresses) => {
-			const serviceAgreements = [];
+		const getServiceAgreementDetails = useCallback(
+			async (addresses) => {
+				const serviceAgreements = [];
 
-			for (let i = 0; i < addresses.length; i++) {
-				const sa = await ethereumApi.current.getServiceAgreementDetails(
-					addresses[i]
-				);
+				for (let i = 0; i < addresses.length; i++) {
+					const sa = await ethereumApi.current.getServiceAgreementDetails(
+						addresses[i]
+					);
 
-				if (!sa) continue;
-				const provider = await ethereumApi.current.getServiceProvider(
-					sa.providerAddress
-				);
+					if (!sa) continue;
+					const provider = await ethereumApi.current.getServiceProvider(
+						sa.providerAddress
+					);
 
-				const serviceAgreement = { provider, ...sa };
-				serviceAgreements.push(serviceAgreement);
-			}
+					const serviceAgreement = { provider, ...sa };
+					serviceAgreements.push(serviceAgreement);
+				}
 
-			return serviceAgreements;
-		}, []);
+				return serviceAgreements;
+			},
+			[ethereumApi]
+		);
 
 		function sortServiceAgreements(serviceAgreements) {
 			if (!serviceAgreements.length) return;
@@ -87,12 +91,6 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 
 			setClosedServiceAgreements(closedServiceAgreements);
 		}
-
-		useEffect(() => {
-			if (!window || !window.ethereum) return;
-
-			ethereumApi.current = ethereumApiFactory(window.ethereum);
-		});
 
 		useEffect(() => {
 			setActiveServiceAgreements([]);
@@ -118,7 +116,7 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 						isClosable: true,
 					});
 				});
-		});
+		}, [getServiceAgreementDetails, serviceAgreements, toast]);
 
 		const panes = [
 			{

@@ -1,12 +1,12 @@
 import { Container, Heading, Icon } from "@chakra-ui/react";
-import { FaFileArchive } from "react-icons/fa";
+import { FaFileContract } from "react-icons/fa6";
 import PropTypes from "prop-types";
 
 const Placeholder = ({ state }) => {
 	return (
 		<Container>
 			<Heading>
-				<Icon as={FaFileArchive} />
+				<Icon as={FaFileContract} />
 				<br />
 				You have not {state} at this time.
 			</Heading>

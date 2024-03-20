@@ -26,7 +26,7 @@ import { TiBusinessCard } from "react-icons/ti";
 import { MdOutlineAlternateEmail } from "react-icons/md";
 import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
-import ethereumApiFactory from "../../ethereum/ethereumApiFactory";
+import useEthereum from "../shared/hooks/useEthereum";
 import { serviceCategories } from "../../common/constants";
 import { contractAddress1, abi } from "../../ethereum/serviceManagerContract";
 import { useWallet } from "../../common/context/walletProvider";
@@ -48,7 +48,7 @@ const BecomeAProPage = () => {
 		useState(false);
 	const { wallet } = useWallet();
 	const navigate = useNavigate();
-	const ethereumApi = useRef();
+	const ethereumApi = useEthereum();
 	const currentBlockNumber = useRef(null);
 
 	const toast = useToast();
@@ -98,11 +98,6 @@ const BecomeAProPage = () => {
 	);
 
 	useEffect(() => {
-		if (!window || !window.ethereum) return;
-		ethereumApi.current = ethereumApiFactory(window.ethereum);
-	});
-
-	useEffect(() => {
 		const getBlockNumber = async () => {
 			const provider = ethereumApi.current?.provider;
 			return await provider.getBlockNumber();
@@ -126,7 +121,7 @@ const BecomeAProPage = () => {
 
 			return () => contract?.off(filter, emitRegistrationInfo);
 		}
-	}, [wallet, emitRegistrationInfo]);
+	}, [wallet, emitRegistrationInfo, ethereumApi]);
 
 	const serviceCategoriesOptions = Object.entries(serviceCategories).map(
 		([k, v]) => ({ value: parseInt(k), label: v })

@@ -131,9 +131,7 @@ const ethereumApiFactory = (web3Provider) => {
 			clientRating,
 			agreementFulfilledOrNullified,
 			termsAmount,
-		] = await contract.getAgreementDetails({
-			gasLimit: 0,
-		});
+		] = await contract.getAgreementDetails();
 
 		return {
 			agreementAddress: address,
@@ -172,6 +170,16 @@ const ethereumApiFactory = (web3Provider) => {
 		const contract = getContractWriter(address, serviceAgreementAbi);
 
 		return await contract.refund(address);
+	};
+
+	const transferFundsToProvider = async (address) => {
+		const contract = getContractWriter(address, serviceAgreementAbi);
+		return await contract.transferFundsToProvider();
+	};
+
+	const updateServiceStatus = async (address, status) => {
+		const contract = getContractWriter(address, serviceAgreementAbi);
+		return await contract.updateServiceState(status);
 	};
 
 	const parseUints = (value, denomination) => {
@@ -226,6 +234,8 @@ const ethereumApiFactory = (web3Provider) => {
 		rateServiceProvider,
 		depositFundsInContract,
 		issueRefundToClient,
+		updateServiceStatus,
+		transferFundsToProvider,
 		parseUints,
 		parseEther,
 		provider,

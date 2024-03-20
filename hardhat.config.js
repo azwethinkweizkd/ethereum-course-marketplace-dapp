@@ -11,7 +11,7 @@ module.exports = {
 		ganache: {
 			url: "http://127.0.0.1:7545",
 			accounts: [
-				"baebeb9bbb538f378b6aed8c325d6ab207bc97ef627582bae457d50754dc7e6e",
+				"dd0a3b686bab9f62854ffc1357344b2b99c97b45681dd2a1f2e1d197ed1d0bd2",
 			],
 		},
 	},

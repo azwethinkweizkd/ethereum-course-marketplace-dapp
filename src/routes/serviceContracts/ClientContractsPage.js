@@ -1,24 +1,19 @@
 import { useEffect, useRef } from "react";
 import { useToast } from "@chakra-ui/react";
+import useEthereum from "../shared/hooks/useEthereum";
 import ServiceAgreementsHoc from "../../components/service-agreement-hoc.js/ServiceAgreementsHoc";
 import ServiceContract from "../../components/service-contracts/ServiceContracts";
 import {
 	CONTRACTS,
 	GENERAL_TRANSACTIONAL_ERROR,
 } from "../../common/constants/";
-import ethereumApiFactory from "../../ethereum/ethereumApiFactory";
 import PropTypes from "prop-types";
 
 const ClientContracts = ({ ...props }) => {
 	const { setReload } = props;
-	const ethereumApi = useRef({});
+	const ethereumApi = useEthereum();
 
 	const toast = useToast();
-
-	useEffect(() => {
-		if (!window || !window.ethereum) return;
-		ethereumApi.current = ethereumApiFactory(window.ethereum);
-	}, []);
 
 	async function onDeposit(agreementAddress, funds) {
 		const tx = await ethereumApi.current.depositFundsInContract(
