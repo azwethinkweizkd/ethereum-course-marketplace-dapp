@@ -16,7 +16,12 @@ const DashboardPage = () => {
 
 	function onSearchCategoryClick(category) {
 		if (category === "All") return navigate(`/service-providers`);
-		navigate(`/service-providers?category=${category.toLowerCase()}`);
+		navigate(
+			`/service-providers?category=${encodeURIComponent(category).replace(
+				/%20/g,
+				"+"
+			)}`
+		);
 	}
 
 	function onSearchInputChange(e) {

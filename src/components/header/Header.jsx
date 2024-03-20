@@ -17,6 +17,7 @@ import {
 	METAMASK_CONNECTED_TEXT,
 } from "../../common/constants";
 import { useWallet } from "../../common/context/walletProvider";
+import useEthereum from "../../routes/shared/hooks/useEthereum";
 
 export default function Header() {
 	const [metamaskButtonDetails, setMetamaskButtonDetails] = useState({
@@ -24,6 +25,7 @@ export default function Header() {
 		buttonText: INSTALL_METAMASK_TEXT,
 	});
 	const { wallet, setWallet } = useWallet();
+	const ethereumApi = useEthereum();
 	const onboarding = useRef();
 	const toast = useToast();
 

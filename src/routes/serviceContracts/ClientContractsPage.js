@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { useToast } from "@chakra-ui/react";
 import useEthereum from "../shared/hooks/useEthereum";
 import ServiceAgreementsHoc from "../../components/service-agreement-hoc.js/ServiceAgreementsHoc";

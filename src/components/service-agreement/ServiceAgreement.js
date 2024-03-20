@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import {
-	AbsoluteCenter,
+	Center,
 	Box,
 	Button,
 	HStack,
@@ -14,7 +14,6 @@ import {
 	Select,
 	Text,
 	Tag,
-	VStack,
 	useToast,
 } from "@chakra-ui/react";
 import { FaEthereum } from "react-icons/fa6";
@@ -24,10 +23,6 @@ import {
 	clientApprovalStatuses,
 	clientApprovalStatusColor,
 } from "../../common/constants";
-// import {
-// 	clientApprovalButtonColor,
-// 	contractStatusColor,
-// } from "../../../lib/utilities";
 
 const ServiceAgreement = ({ agreement, onStatusChange, onPaymentRequest }) => {
 	const {
@@ -117,21 +112,24 @@ const ServiceAgreement = ({ agreement, onStatusChange, onPaymentRequest }) => {
 	return (
 		<>
 			{submitting ? (
-				<AbsoluteCenter>
-					<HStack alignContent="center">
+				<Center>
+					<HStack alignContent="center" backgroundColor="white">
 						<Spinner
 							thickness="4px"
 							speed="0.65s"
 							emptyColor="gray.200"
 							color="blue.500"
 							size="xl"
+							s
 						/>
-						<Heading>Creating contract</Heading>
+						<Heading>
+							Updating contract, please confirm change in MetaMask wallet
+						</Heading>
 					</HStack>
-				</AbsoluteCenter>
+				</Center>
 			) : (
-				<Box>
-					<Card>
+				<Box mb={4}>
+					<Card border="4px solid black">
 						<CardBody>
 							<Grid templateRows="repeat(2, 1fr)" gap={6}>
 								<GridItem textAlign="center">
