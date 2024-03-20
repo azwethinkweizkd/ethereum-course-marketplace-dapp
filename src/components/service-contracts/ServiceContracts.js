@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
-	AbsoluteCenter,
 	Box,
 	Button,
 	Divider,
@@ -12,7 +11,6 @@ import {
 	Flex,
 	Grid,
 	GridItem,
-	Radio,
 	Spinner,
 	Text,
 	Tag,
@@ -24,11 +22,12 @@ import {
 import { Icon, PhoneIcon, AtSignIcon } from "@chakra-ui/icons";
 import { FaEthereum, FaStar } from "react-icons/fa";
 import { GoThumbsup, GoThumbsdown } from "react-icons/go";
-import { CLIENT_APPROVED, CLIENT_UNAPPROVED } from "../../common/constants";
-// import {
-// 	clientApprovalButtonColor,
-// 	contractStatusColor,
-// } from "../../../lib/utilities";
+import { uniqueId } from "lodash";
+import {
+	CLIENT_APPROVED,
+	CLIENT_UNAPPROVED,
+	agreementStatusColors,
+} from "../../common/constants";
 
 const ServiceContract = ({
 	agreement,
@@ -48,38 +47,25 @@ const ServiceContract = ({
 		agreementStatusKey,
 	} = agreement;
 
-	const {
-		companyName,
-		email,
-		phone,
-		serviceCategory,
-		serviceCategoryKey,
-		serviceCost,
-	} = provider;
+	const { companyName, email, phone, serviceCategory, serviceCost } = provider;
 
 	const [currentRating, setCurrentRating] = useState(clientRating);
 	const [hover, setHover] = useState(0);
 	const [submitting, setSubmitting] = useState(false);
-	const [approval, setApproval] = useState(clientApprovalStatusKey);
+	const [, setApproval] = useState(clientApprovalStatusKey);
 	const [contractStatusLabelColor, setContractStatusLabelColor] =
 		useState("grey");
-	const [approvalButtonColor, setApprovalButtonColor] = useState("grey");
-	const [disapprovalButtonColor, setDisapprovalButtonColor] = useState("grey");
+
+	console.log(contractStatusLabelColor);
 
 	const toast = useToast();
 
-	// useEffect(() => {
-	// 	setApproval(clientApprovalStatusKey);
-	// 	// const statusColor = contractStatusColor[agreementStatusKey];
-	// 	// setContractStatusLabelColor(statusColor);
-	// }, [agreementStatusKey, clientApprovalStatusKey]);
-
-	// useEffect(() => {
-	// 	// const { approvalColor, disapprovalColor } =
-	// 	// 	clientApprovalButtonColor[approval];
-	// 	// setApprovalButtonColor(approvalColor);
-	// 	// setDisapprovalButtonColor(disapprovalColor);
-	// }, [approval]);
+	useEffect(() => {
+		setApproval(clientApprovalStatusKey);
+		const statusColor = agreementStatusColors[agreementStatusKey];
+		console.log(statusColor);
+		setContractStatusLabelColor(statusColor);
+	}, [agreementStatusKey, clientApprovalStatusKey]);
 
 	async function onHandlingApproval() {
 		setSubmitting(true);
@@ -182,8 +168,13 @@ const ServiceContract = ({
 	return (
 		<>
 			{submitting ? (
-				<AbsoluteCenter>
-					<HStack alignContent="center">
+				<Center>
+					<HStack
+						alignContent="center"
+						backgroundColor="white"
+						p={12}
+						rounded="2xl"
+						border="2px solid black">
 						<Spinner
 							thickness="4px"
 							speed="0.65s"
@@ -191,11 +182,13 @@ const ServiceContract = ({
 							color="blue.500"
 							size="xl"
 						/>
-						<Heading>Creating contract</Heading>
+						<Heading>
+							Updating contract, please confirm change in MetaMask wallet
+						</Heading>
 					</HStack>
-				</AbsoluteCenter>
+				</Center>
 			) : (
-				<Box>
+				<Box mb={4}>
 					<Card border="4px solid black">
 						<CardBody>
 							<Grid
@@ -229,7 +222,11 @@ const ServiceContract = ({
 										<Heading as="h4" size="lg">
 											Service Status
 										</Heading>
-										<Tag color={contractStatusLabelColor}>
+										<Tag
+											colorScheme={contractStatusLabelColor}
+											px={6}
+											py={2}
+											fontWeight="700">
 											{agreementStatus}
 										</Tag>
 									</VStack>
@@ -264,7 +261,10 @@ const ServiceContract = ({
 												colorScheme="cyan"
 												variant="solid"
 												onClick={onHandlingDeposit}
-												disabled={agreementFulfilledOrNullified}>
+												disabled={
+													agreementFulfilledOrNullified ||
+													contractBalance === serviceCost
+												}>
 												Deposit
 											</Button>
 										</Center>
@@ -283,55 +283,60 @@ const ServiceContract = ({
 									</GridItem>
 								)}
 							</Grid>
-							<Flex pt={4}>
-								<HStack>
-									<Text>Was the service by {companyName} completed?</Text>
-									<ButtonGroup>
-										<IconButton
-											icon={<GoThumbsup />}
-											isRound={true}
-											colorScheme="green"
-											color="white"
-											onClick={() => onHandlingApproval()}
-										/>
-										<IconButton
-											icon={<GoThumbsdown />}
-											isRound={true}
-											colorScheme="red"
-											color="white"
-											onClick={() => onHandlingDisapproval()}
-										/>
-									</ButtonGroup>
-								</HStack>
-								<Center flex="1">
-									<VStack>
-										<Text>Rating</Text>
-										<HStack spacing="2px">
-											{[...Array(5)].map((star, index) => {
-												const ratingValue = index + 1;
-												return (
-													<Box
-														key={index}
-														color={
-															ratingValue <= (hover || currentRating)
-																? "#ffc107"
-																: "#e4e5e9"
-														}
-														onMouseEnter={() => setHover(ratingValue)}
-														onMouseLeave={() => setHover(0)}
-														onClick={() => onHandlingRating(ratingValue)}>
-														<FaStar
-															cursor="pointer"
-															size={20}
-															transition="color 200ms"
-														/>
-													</Box>
-												);
-											})}
+							{agreementStatus === "Completed" &&
+								!agreementFulfilledOrNullified && (
+									<Flex pt={4}>
+										<HStack>
+											<Text>Was the service by {companyName} completed?</Text>
+											<ButtonGroup>
+												<IconButton
+													icon={<GoThumbsup />}
+													isRound={true}
+													colorScheme="green"
+													color="white"
+													onClick={() => onHandlingApproval()}
+												/>
+												<IconButton
+													icon={<GoThumbsdown />}
+													isRound={true}
+													colorScheme="red"
+													color="white"
+													onClick={() => onHandlingDisapproval()}
+												/>
+											</ButtonGroup>
 										</HStack>
-									</VStack>
-								</Center>
-							</Flex>
+										<Center flex="1">
+											<VStack>
+												<Text>Rating</Text>
+												<HStack spacing="2px">
+													{[...Array(5)].map((_, index) => {
+														const ratingValue = index + 1;
+														const uniqueIdKey = uniqueId();
+														return (
+															<Box
+																key={uniqueIdKey}
+																color={
+																	ratingValue <= (hover || currentRating)
+																		? "#ffc107"
+																		: "#e4e5e9"
+																}
+																onMouseEnter={() => setHover(ratingValue)}
+																onMouseLeave={() => setHover(0)}
+																onClick={() => onHandlingRating(ratingValue)}>
+																<FaStar
+																	key={uniqueIdKey}
+																	cursor="pointer"
+																	size={20}
+																	transition="color 200ms"
+																/>
+															</Box>
+														);
+													})}
+												</HStack>
+											</VStack>
+										</Center>
+									</Flex>
+								)}
 						</CardBody>
 					</Card>
 				</Box>

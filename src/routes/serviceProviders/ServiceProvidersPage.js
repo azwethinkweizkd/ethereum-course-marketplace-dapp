@@ -61,9 +61,12 @@ const ServiceProvidersPage = () => {
 			await ethereumApi.current.getServiceProviders();
 
 		if (category) {
-			const categoryKey = serviceCategoriesKeys[category];
+			let decodedCategory = decodeURIComponent(category.replace(/\+/g, " "));
+			const categoryKey = serviceCategoriesKeys[decodedCategory];
 			currentServiceProviders = currentServiceProviders.filter(
-				({ serviceCategoriesKey }) => serviceCategoriesKey !== categoryKey
+				({ serviceCategoryKey }) => {
+					return serviceCategoryKey === categoryKey;
+				}
 			);
 		}
 

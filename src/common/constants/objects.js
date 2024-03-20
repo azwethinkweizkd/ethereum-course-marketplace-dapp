@@ -21,6 +21,13 @@ export const agreementStatuses = {
 	3: "WillNotComplete",
 };
 
+export const agreementStatusColors = {
+	0: "orange",
+	1: "cyan",
+	2: "green",
+	3: "red",
+};
+
 export const clientApprovalStatuses = {
 	0: "Waiting For Approval",
 	1: "Approved",

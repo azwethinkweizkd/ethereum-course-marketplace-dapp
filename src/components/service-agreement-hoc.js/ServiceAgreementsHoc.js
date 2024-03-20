@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
 	Box,
 	Tabs,
@@ -11,7 +11,6 @@ import {
 } from "@chakra-ui/react";
 import useEthereum from "../../routes/shared/hooks/useEthereum";
 import Placeholder from "../placeholder/Placeholder";
-import ethereumApiFactory from "../../ethereum/ethereumApiFactory";
 import { useWallet } from "../../common/context/walletProvider";
 import { AGREEMENTS, CONTRACTS } from "../../common/constants";
 import PropTypes from "prop-types";
@@ -124,19 +123,27 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 					<Tab
 						key="active"
 						fontSize="lg"
-						fontWeight="700"
-						backgroundColor="white">
+						fontWeight="400"
+						backgroundColor="white"
+						_selected={{
+							borderWidth: "2px 2px 0px",
+							borderColor: "blue",
+							borderStyle: "solid",
+							fontWeight: "700",
+							color: "blue",
+						}}
+						mb={0.1}>
 						Active
 						<Tag
 							variant="solid"
-							colorScheme="teal"
+							colorScheme="green"
 							rounded="full"
 							textAlign="center"
 							py={2.5}
 							px={4}
 							mx={2}
 							fontSize="lg"
-							fontWeight="700">
+							fontWeight="400">
 							{activeServiceAgreements.length}
 						</Tag>
 					</Tab>
@@ -162,19 +169,27 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 					<Tab
 						key="closed"
 						fontSize="lg"
-						fontWeight="700"
-						backgroundColor="white">
+						fontWeight="400"
+						backgroundColor="white"
+						_selected={{
+							borderWidth: "2px 2px 0px",
+							borderColor: "blue",
+							borderStyle: "solid",
+							fontWeight: "700",
+							color: "blue",
+						}}
+						mb={0.1}>
 						Closed
 						<Tag
 							variant="solid"
-							colorScheme="teal"
+							colorScheme="red"
 							rounded="full"
 							textAlign="center"
 							py={2.5}
 							px={4}
 							mx={2}
 							fontSize="lg"
-							fontWeight="700">
+							fontWeight="400">
 							{closedServiceAgreements.length}
 						</Tag>
 					</Tab>
@@ -200,8 +215,17 @@ function ServiceAgreementsHoc(ContextComponent, context) {
 		return (
 			<Box width="75%" mx="auto" mt={12}>
 				<Tabs variant="enclosed">
-					<TabList>{panes.map((pane) => pane.menuItem)}</TabList>
-					<TabPanels>{panes.map((pane) => pane.render())}</TabPanels>
+					<TabList borderBottom="6px solid black">
+						{panes.map((pane) => pane.menuItem)}
+					</TabList>
+					<TabPanels
+						mt={6}
+						rounded="2xl"
+						boxShadow="dark-lg"
+						backdropFilter="auto"
+						backdropBlur="8px">
+						{panes.map((pane) => pane.render())}
+					</TabPanels>
 				</Tabs>
 			</Box>
 		);
