@@ -7,6 +7,7 @@ import BecomeAProPage from "./routes/pro/BecomeAProPage";
 import ProServicesPage from "./routes/services-page/ProServicesPage";
 import ServiceProvidersPage from "./routes/serviceProviders/ServiceProvidersPage";
 import ClientContractsPage from "./routes/serviceContracts/ClientContractsPage";
+import ServiceProviderAgreementsPage from "./routes/serviceAgreements/ServiceProviderAgreementsPage";
 
 const App = () => (
 	<div
@@ -27,6 +28,11 @@ const App = () => (
 					exact
 					path="/service-contracts"
 					element={<ClientContractsPage />}
+				/>
+				<Route
+					exact
+					path="/service-agreements"
+					element={<ServiceProviderAgreementsPage />}
 				/>
 			</Routes>
 		</Box>
