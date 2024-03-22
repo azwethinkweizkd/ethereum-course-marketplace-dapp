@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
-import { v4 as uuidv4 } from "uuid";
 import { Center, useToast } from "@chakra-ui/react";
 import ProService from "../../components/pro-service/ProService";
 import ethereumApiFactory from "../../ethereum/ethereumApiFactory";
 import { useWallet } from "../../common/context/walletProvider";
+import { uniqueId } from "lodash";
 
 const ProServicesPage = () => {
 	const [services, setServices] = useState([]);
@@ -40,7 +40,7 @@ const ProServicesPage = () => {
 		<Center py={12}>
 			{services.length > 0 &&
 				services.map((service) => {
-					let newKey = uuidv4();
+					let newKey = uniqueId();
 					return <ProService key={newKey} service={service} />;
 				})}
 		</Center>

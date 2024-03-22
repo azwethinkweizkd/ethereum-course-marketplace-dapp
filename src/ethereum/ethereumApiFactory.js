@@ -182,6 +182,15 @@ const ethereumApiFactory = (web3Provider) => {
 		return await contract.updateServiceState(status);
 	};
 
+	const getAverageRatingFunc = async (providerAddress) => {
+		const contractReader = getContractReader(
+			serviceManagerContractAddress,
+			serviceManagerAbi
+		);
+
+		return await contractReader.getAverageRating(providerAddress);
+	};
+
 	const parseUints = (value, denomination) => {
 		return ethers.utils.parseUnits(value, denomination);
 	};
@@ -230,6 +239,7 @@ const ethereumApiFactory = (web3Provider) => {
 		getClientServiceAgreements,
 		getProviderServiceAgreements,
 		getServiceAgreementDetails,
+		getAverageRatingFunc,
 		updateClientApprovalStatus,
 		rateServiceProvider,
 		depositFundsInContract,

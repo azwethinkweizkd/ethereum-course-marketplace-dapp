@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import {
 	Card,
@@ -17,7 +18,13 @@ import { IoBusiness } from "react-icons/io5";
 import { FaEthereum, FaBusinessTime } from "react-icons/fa";
 import YesNoModal from "./YesNoModal";
 
-const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
+const ServiceProvider = ({
+	provider,
+	handleContractAgreement,
+	handleGetAverageRating,
+	loading,
+}) => {
+	const [averageRating, setAverageRating] = useState(null);
 	const {
 		companyName,
 		email,
@@ -33,6 +40,20 @@ const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
 		onClose();
 		await handleContractAgreement(provider);
 	};
+
+	useEffect(() => {
+		const fetchAverageRating = async () => {
+			try {
+				const avgRating = await handleGetAverageRating(provider);
+				console.log(avgRating);
+				setAverageRating(avgRating);
+			} catch (error) {
+				console.error("Error fetching average rating:", error);
+			}
+		};
+
+		fetchAverageRating();
+	}, [provider, handleGetAverageRating]);
 
 	return (
 		<WrapItem>
