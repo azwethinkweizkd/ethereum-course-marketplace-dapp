@@ -21,7 +21,7 @@ const ProService = ({ service }) => {
 
 	return (
 		<Box px={24}>
-			<Card>
+			<Card border="2px solid black">
 				<CardBody>
 					<Grid templateRows="repeat(2, 1fr)" gap={6}>
 						<GridItem>

@@ -141,8 +141,16 @@ const ServiceProvidersPage = () => {
 					duration: 9000,
 					isClosable: true,
 				});
+			} finally {
+				setLoading(false);
 			}
 		}
+	}
+
+	async function handleGetAverageRating(provider) {
+		const { ownerAddress } = provider;
+
+		return await ethereumApi.current.getAverageRatingFunc(ownerAddress);
 	}
 
 	return (
@@ -168,6 +176,7 @@ const ServiceProvidersPage = () => {
 								provider={sp}
 								key={uuid()}
 								handleContractAgreement={handleContractAgreement}
+								handleGetAverageRating={handleGetAverageRating}
 								loading={loading}
 							/>
 						))}

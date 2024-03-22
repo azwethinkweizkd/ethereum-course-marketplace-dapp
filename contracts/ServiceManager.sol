@@ -103,4 +103,28 @@ contract ServiceManager {
     function getProviderServiceAgreements(address _providerAddress) external view returns(address[] memory) {
         return providerAgreements[_providerAddress];
     }
+
+    function getAverageRating(address _provider) external view returns (uint256) {
+        require(serviceProvidersIndexes.length > 0, "No service providers");
+        require(serviceProvidersIndexes[serviceProviders[_provider].index] == _provider, "Service provider does not exist");
+
+        address[] memory providerAgreementsArrayForRating  = providerAgreements[_provider];
+        uint256 totalRatings = 0;
+        uint256 agreementsWithRatings = 0;
+
+        for (uint256 i = 0; i < providerAgreementsArrayForRating.length; i++) {
+            ServiceAgreement serviceAgreement = ServiceAgreement(providerAgreementsArrayForRating[i]);
+            (, , , , , ServiceAgreement.Rating clientRating, , )  = serviceAgreement.getAgreementDetails();
+            if (clientRating != ServiceAgreement.Rating.Unrated) {
+                totalRatings += uint256(clientRating);
+                agreementsWithRatings++;
+            }
+        }
+
+        if (agreementsWithRatings == 0) {
+            return 0;
+        } else {
+            return totalRatings / agreementsWithRatings;
+        }
+    }
 }
