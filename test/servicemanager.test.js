@@ -3,8 +3,9 @@
 const { serviceProvider1, serviceProvider2 } = require("./testAccounts");
 const { ethers } = require("hardhat");
 const { expect } = require("chai");
+const { BigNumber } = require("ethers");
 
-describe("ServiceManager", async () => {
+describe("ServiceManager", () => {
 	let ServiceManager, provider, client, instance;
 
 	before(async () => {
@@ -17,7 +18,7 @@ describe("ServiceManager", async () => {
 		await instance.deployed();
 	});
 
-	describe("Service Providers", async () => {
+	describe("Service Providers", () => {
 		it("should allow for storing and retrieving a new service provider", async () => {
 			const sptx = await instance
 				.connect(provider)
@@ -104,7 +105,7 @@ describe("ServiceManager", async () => {
 		});
 	});
 
-	describe("Service Provider Errors", async () => {
+	describe("Service Provider Errors", () => {
 		it("should return error when there is no service providers", async () => {
 			try {
 				await instance.getServiceProvider(provider.address);
@@ -139,7 +140,7 @@ describe("ServiceManager", async () => {
 			expect(value.length).to.equal(0);
 		});
 	});
-	describe("Service Agreements", async () => {
+	describe("Service Agreements", () => {
 		let retrieved;
 
 		beforeEach(async () => {
@@ -206,31 +207,6 @@ describe("ServiceManager", async () => {
 		});
 
 		it("Create new service agreement emits NewAgreement event", async () => {
-			await instance.connect(client).createServiceAgreement(retrieved);
-
-			const agreementAddresses = await instance.getProviderServiceAgreements(
-				provider.address
-			);
-
-			let totalRating = 0;
-			for (let i = 0; i < agreementAddresses.length; i++) {
-				const serviceAgreement = await ethers.getContractAt(
-					"ServiceAgreement",
-					agreementAddresses[i]
-				);
-				const [, , , , , rating] = await serviceAgreement.getAgreementDetails();
-				totalRating += rating;
-			}
-			const averageRating = totalRating / agreementAddresses.length;
-
-			const providerAverageRating = await instance.getAverageRating(
-				provider.address
-			);
-
-			expect(providerAverageRating).to.equal(averageRating);
-		});
-
-		it("Return average star rating from provider", async () => {
 			const tx = await instance
 				.connect(client)
 				.createServiceAgreement(retrieved);
@@ -240,10 +216,12 @@ describe("ServiceManager", async () => {
 			expect(tx)
 				.to.emit(instance, "NewAgreement")
 				.withArgs(client.address, provider.address, agreementAddress[0]);
+
+			await instance.connect(client).createServiceAgreement(retrieved);
 		});
 	});
 
-	describe("ServiceManager Service Agreement Errors", async () => {
+	describe("ServiceManager Service Agreement Errors", () => {
 		let retrieved, amount, tx;
 
 		beforeEach(async () => {

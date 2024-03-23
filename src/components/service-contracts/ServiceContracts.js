@@ -56,8 +56,6 @@ const ServiceContract = ({
 	const [contractStatusLabelColor, setContractStatusLabelColor] =
 		useState("grey");
 
-	console.log(contractStatusLabelColor);
-
 	const toast = useToast();
 
 	useEffect(() => {

@@ -147,38 +147,6 @@ const ServiceProvidersPage = () => {
 		}
 	}
 
-	async function handleGetAverageRating(provider) {
-		const { ownerAddress } = provider;
-		if (wallet?.accounts && wallet?.accounts.length > 0) {
-			ethereumApi.current = ethereumApiFactory(window.ethereum);
-			console.log(ethereumApi.current);
-			// const filter = contractReader.current.filters.NewAgreement(
-			// 	wallet.accounts[0],
-			// 	ownerAddress
-			// );
-
-			// eventFilter.current = filter;
-
-			// try {
-			// 	contractReader.current.on(eventFilter, emitNewAgreementInfo);
-			// 	setLoading(true);
-
-			// 	return await ethereumApi.current.createServiceAgreement(ownerAddress);
-			// } catch (error) {
-			// 	toast({
-			// 		title: null,
-			// 		description:
-			// 			"There was an error creating service agreement between you and the provider",
-			// 		status: "error",
-			// 		duration: 9000,
-			// 		isClosable: true,
-			// 	});
-			// } finally {
-			// 	setLoading(false);
-			// }
-		}
-	}
-
 	return (
 		<>
 			{loading ? (
@@ -202,7 +170,6 @@ const ServiceProvidersPage = () => {
 								provider={sp}
 								key={uuid()}
 								handleContractAgreement={handleContractAgreement}
-								handleGetAverageRating={handleGetAverageRating}
 								loading={loading}
 							/>
 						))}

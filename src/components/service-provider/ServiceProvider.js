@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import {
 	Card,
@@ -16,16 +16,13 @@ import {
 import { PhoneIcon, AtSignIcon } from "@chakra-ui/icons";
 import { IoBusiness } from "react-icons/io5";
 import { FaEthereum, FaBusinessTime } from "react-icons/fa";
+import useEthereum from "../../routes/shared/hooks/useEthereum";
 import YesNoModal from "./YesNoModal";
 
-const ServiceProvider = ({
-	provider,
-	handleContractAgreement,
-	handleGetAverageRating,
-	loading,
-}) => {
+const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
 	const [averageRating, setAverageRating] = useState(null);
 	const {
+		ownerAddress,
 		companyName,
 		email,
 		phone,
@@ -38,27 +35,26 @@ const ServiceProvider = ({
 
 	const onContractAgreement = async () => {
 		onClose();
-		await handleContractAgreement(provider);
+		await handleContractAgreement();
 	};
 
-	useEffect(() => {
-		const fetchAverageRating = async () => {
-			try {
-				const avgRating = await handleGetAverageRating(provider);
-				console.log(avgRating);
-				setAverageRating(avgRating);
-			} catch (error) {
-				console.error("Error fetching average rating:", error);
-			}
-		};
+	const ethereumApi = useEthereum();
 
-		fetchAverageRating();
-	}, [provider, handleGetAverageRating]);
+	const getAverageRating = useCallback(async () => {
+		return await ethereumApi.current.getAverageRatingFunc(ownerAddress);
+	}, [ownerAddress, ethereumApi]);
+
+	useEffect(() => {
+		getAverageRating()
+			.then((res) => setAverageRating(res))
+			.catch((err) => console.log(err));
+	});
 
 	return (
 		<WrapItem>
 			<Card boxShadow="2xl" rounded="2xl" minW="500px" border="2px solid black">
 				<CardBody pt={12} pb={8} px={12}>
+					<p>{averageRating}</p>
 					<VStack>
 						<List spacing={2}>
 							<ListItem>
