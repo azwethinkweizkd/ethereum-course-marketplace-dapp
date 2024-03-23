@@ -187,7 +187,7 @@ const ethereumApiFactory = (web3Provider) => {
 			serviceManagerContractAddress,
 			serviceManagerAbi
 		);
-
+		console.log(providerAddress);
 		return await contractReader.getAverageRating(providerAddress);
 	};
 
