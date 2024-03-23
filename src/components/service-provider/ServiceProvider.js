@@ -35,7 +35,7 @@ const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
 
 	const onContractAgreement = async () => {
 		onClose();
-		await handleContractAgreement();
+		await handleContractAgreement(provider);
 	};
 
 	const ethereumApi = useEthereum();
