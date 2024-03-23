@@ -104,11 +104,9 @@ contract ServiceManager {
         return providerAgreements[_providerAddress];
     }
 
-    function getAverageRating(address _provider) external view returns (uint256) {
-        require(serviceProvidersIndexes.length > 0, "No service providers");
-        require(serviceProvidersIndexes[serviceProviders[_provider].index] == _provider, "Service provider does not exist");
+    function getAverageRating(address _providerAddress) external view validProvidersOnly(_providerAddress) returns (uint256) {
 
-        address[] memory providerAgreementsArrayForRating  = providerAgreements[_provider];
+        address[] memory providerAgreementsArrayForRating  = providerAgreements[_providerAddress];
         uint256 totalRatings = 0;
         uint256 agreementsWithRatings = 0;
 
