@@ -38,6 +38,10 @@ contract ServiceManager {
         _;
     }
 
+    function enumToUint(ServiceAgreement.Rating _enumValue) internal pure returns (uint256) {
+        return uint256(_enumValue);
+    }
+
     function createNewServiceProvider(
         string memory _companyName, 
         string memory _email, 
@@ -102,27 +106,5 @@ contract ServiceManager {
 
     function getProviderServiceAgreements(address _providerAddress) external view returns(address[] memory) {
         return providerAgreements[_providerAddress];
-    }
-
-    function getAverageRating(address _providerAddress) external view validProvidersOnly(_providerAddress) returns (uint256) {
-
-        address[] memory providerAgreementsArrayForRating  = providerAgreements[_providerAddress];
-        uint256 totalRatings = 0;
-        uint256 agreementsWithRatings = 0;
-
-        for (uint256 i = 0; i < providerAgreementsArrayForRating.length; i++) {
-            ServiceAgreement serviceAgreement = ServiceAgreement(providerAgreementsArrayForRating[i]);
-            (, , , , , ServiceAgreement.Rating clientRating, , )  = serviceAgreement.getAgreementDetails();
-            if (clientRating != ServiceAgreement.Rating.Unrated) {
-                totalRatings += uint256(clientRating);
-                agreementsWithRatings++;
-            }
-        }
-
-        if (agreementsWithRatings == 0) {
-            return 0;
-        } else {
-            return totalRatings / agreementsWithRatings;
-        }
     }
 }

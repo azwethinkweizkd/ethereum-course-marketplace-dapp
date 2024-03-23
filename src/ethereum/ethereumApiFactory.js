@@ -183,12 +183,49 @@ const ethereumApiFactory = (web3Provider) => {
 	};
 
 	const getAverageRatingFunc = async (providerAddress) => {
-		const contractReader = getContractReader(
+		const contract = getContractReader(
 			serviceManagerContractAddress,
 			serviceManagerAbi
 		);
-		console.log(providerAddress);
-		return await contractReader.getAverageRating(providerAddress);
+
+		const providerAgreements = await contract.getProviderServiceAgreements(
+			providerAddress
+		);
+
+		let totalRatings = 0;
+		let agreementsWithRatings = 0;
+
+		for (let index = 0; index < providerAgreements.length; index++) {
+			const address = providerAgreements[index];
+			const contract = getContractReader(address, serviceAgreementAbi);
+
+			const [
+				,
+				,
+				,
+				agreementStatus,
+				clientApprovalStatus,
+				clientRating,
+				agreementFulfilledOrNullified,
+				,
+			] = await contract.getAgreementDetails();
+
+			if (
+				agreementStatus === 2 &&
+				clientApprovalStatus !== 0 &&
+				clientRating &&
+				agreementFulfilledOrNullified
+			) {
+				totalRatings += clientRating;
+				agreementsWithRatings++;
+			}
+		}
+
+		if (agreementsWithRatings > 0) {
+			return totalRatings / agreementsWithRatings;
+		} else {
+			return 0;
+		}
 	};
 
 	const parseUints = (value, denomination) => {
