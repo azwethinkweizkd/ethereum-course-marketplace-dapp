@@ -12,11 +12,13 @@ import {
 	Box,
 	Text,
 	useDisclosure,
+	Center,
 } from "@chakra-ui/react";
 import { PhoneIcon, AtSignIcon } from "@chakra-ui/icons";
 import { IoBusiness } from "react-icons/io5";
 import { FaEthereum, FaBusinessTime } from "react-icons/fa";
 import useEthereum from "../../routes/shared/hooks/useEthereum";
+import StarRatingDisplay from "../star-rating-display/StarRatingDisplay";
 import YesNoModal from "./YesNoModal";
 
 const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
@@ -54,7 +56,6 @@ const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
 		<WrapItem>
 			<Card boxShadow="2xl" rounded="2xl" minW="500px" border="2px solid black">
 				<CardBody pt={12} pb={8} px={12}>
-					<p>{averageRating}</p>
 					<VStack>
 						<List spacing={2}>
 							<ListItem>
@@ -88,6 +89,9 @@ const ServiceProvider = ({ provider, handleContractAgreement, loading }) => {
 								</Text>
 							</ListItem>
 						</List>
+						<Center>
+							<StarRatingDisplay rating={averageRating || 0} />
+						</Center>
 						<Box py={4} width="100%">
 							<Button
 								width="100%"

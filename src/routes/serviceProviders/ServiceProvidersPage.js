@@ -163,7 +163,7 @@ const ServiceProvidersPage = () => {
 					</HStack>
 				</AbsoluteCenter>
 			) : (
-				<Wrap mt={12} spacing={24} justify="center">
+				<Wrap mt={12} p={6} spacing={24} justify="center">
 					{serviceProviders.length > 0 &&
 						serviceProviders.map((sp) => (
 							<ServiceProvider

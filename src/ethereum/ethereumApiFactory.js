@@ -222,7 +222,16 @@ const ethereumApiFactory = (web3Provider) => {
 		}
 
 		if (agreementsWithRatings > 0) {
-			return totalRatings / agreementsWithRatings;
+			const averageRating = totalRatings / agreementsWithRatings;
+			const decimal = averageRating - Math.floor(averageRating);
+
+			if (decimal < 0.33) {
+				return Math.floor(averageRating);
+			} else if (decimal >= 0.33 && decimal < 0.75) {
+				return Math.ceil(averageRating * 2) / 2;
+			} else {
+				return Math.ceil(averageRating);
+			}
 		} else {
 			return 0;
 		}
