@@ -22,7 +22,7 @@ import {
 import { Icon, PhoneIcon, AtSignIcon } from "@chakra-ui/icons";
 import { FaEthereum, FaStar } from "react-icons/fa";
 import { GoThumbsup, GoThumbsdown } from "react-icons/go";
-import { uniqueId } from "lodash";
+import { v4 as uuidv4 } from "uuid";
 import {
 	CLIENT_APPROVED,
 	CLIENT_UNAPPROVED,
@@ -61,7 +61,6 @@ const ServiceContract = ({
 	useEffect(() => {
 		setApproval(clientApprovalStatusKey);
 		const statusColor = agreementStatusColors[agreementStatusKey];
-		console.log(statusColor);
 		setContractStatusLabelColor(statusColor);
 	}, [agreementStatusKey, clientApprovalStatusKey]);
 
@@ -309,10 +308,11 @@ const ServiceContract = ({
 												<HStack spacing="2px">
 													{[...Array(5)].map((_, index) => {
 														const ratingValue = index + 1;
-														const uniqueIdKey = uniqueId();
+														let uniqueKey = uuidv4();
+														console.log(uniqueKey);
 														return (
-															<Box
-																key={uniqueIdKey}
+															<FaStar
+																key={uniqueKey}
 																color={
 																	ratingValue <= (hover || currentRating)
 																		? "#ffc107"
@@ -320,14 +320,11 @@ const ServiceContract = ({
 																}
 																onMouseEnter={() => setHover(ratingValue)}
 																onMouseLeave={() => setHover(0)}
-																onClick={() => onHandlingRating(ratingValue)}>
-																<FaStar
-																	key={uniqueIdKey}
-																	cursor="pointer"
-																	size={20}
-																	transition="color 200ms"
-																/>
-															</Box>
+																onClick={() => onHandlingRating(ratingValue)}
+																cursor="pointer"
+																size={20}
+																transition="color 200ms"
+															/>
 														);
 													})}
 												</HStack>
