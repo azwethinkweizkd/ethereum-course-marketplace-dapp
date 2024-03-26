@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+//import { Buffer } from "buffer";
 import { Formik, Form, Field } from "formik";
 import {
 	Box,
@@ -24,6 +25,7 @@ import { PhoneIcon } from "@chakra-ui/icons";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { TiBusinessCard } from "react-icons/ti";
 import { MdOutlineAlternateEmail } from "react-icons/md";
+// import { LuFileUp } from "react-icons/lu";
 import { v4 as uuidv4 } from "uuid";
 import * as Yup from "yup";
 import useEthereum from "../shared/hooks/useEthereum";
@@ -50,6 +52,7 @@ const BecomeAProPage = () => {
 	const navigate = useNavigate();
 	const ethereumApi = useEthereum();
 	const currentBlockNumber = useRef(null);
+	// const inputFile = useRef({});
 
 	const toast = useToast();
 
@@ -96,6 +99,16 @@ const BecomeAProPage = () => {
 		},
 		[navigate]
 	);
+
+	// const onFileChange = async (e) => {
+	// 	const reader = new FileReader();
+
+	// 	reader.onload = () => {
+	// 		const buffer = Buffer.from(reader.result);
+	// 	};
+
+	// 	reader.readAsArrayBuffer(e.target.files[0]);
+	// };
 
 	useEffect(() => {
 		const getBlockNumber = async () => {
@@ -161,6 +174,14 @@ const BecomeAProPage = () => {
 							<Icon as={HiOutlineUserCircle} boxSize={12} />
 							<Heading>Become a Pro</Heading>
 						</HStack>
+						{/* <Button
+							leftIcon={<LuFileUp />}
+							colorScheme="yellow"
+							variant="solid"
+							onClick={() => inputFile.current.click()}>
+							Choose logo file
+						</Button>
+						<input type="file" hidden ref={inputFile} onChange={onFileChange} /> */}
 						<Formik
 							initialValues={{
 								companyName: "",
@@ -189,7 +210,9 @@ const BecomeAProPage = () => {
 															placeholder="Company name"
 															bgColor="black"
 															color="white"
-															_placeholder={{ color: "white" }}
+															_placeholder={{
+																color: "white",
+															}}
 															required
 														/>
 													</InputGroup>
@@ -213,7 +236,9 @@ const BecomeAProPage = () => {
 															type="tel"
 															placeholder="555-555-5555"
 															required
-															_placeholder={{ color: "white" }}
+															_placeholder={{
+																color: "white",
+															}}
 															color="white"
 															bgColor="black"
 														/>
@@ -242,7 +267,9 @@ const BecomeAProPage = () => {
 															placeholder="Email address"
 															color="white"
 															bgColor="black"
-															_placeholder={{ color: "white" }}
+															_placeholder={{
+																color: "white",
+															}}
 															required
 														/>
 													</InputGroup>
@@ -264,17 +291,25 @@ const BecomeAProPage = () => {
 														bg="black"
 														color="white"
 														placeholder="Select service provided"
-														_placeholder={{ color: "white" }}>
-														<optgroup style={{ backgroundColor: "black" }}>
+														_placeholder={{
+															color: "white",
+														}}>
+														<optgroup
+															style={{
+																backgroundColor: "black",
+															}}>
 															<option value="">
 																--Please choose an option--
 															</option>
 															{serviceCategoriesOptions.map(
-																({ value, label, index }) => (
-																	<option key={uuidv4()} value={value}>
-																		{label}
-																	</option>
-																)
+																({ value, label, index }) => {
+																	const optionKey = uuidv4();
+																	return (
+																		<option key={optionKey} value={value}>
+																			{label}
+																		</option>
+																	);
+																}
 															)}
 														</optgroup>
 													</Select>
@@ -295,7 +330,9 @@ const BecomeAProPage = () => {
 														<Input
 															{...field}
 															placeholder="Service Cost (Wei)"
-															_placeholder={{ color: "white" }}
+															_placeholder={{
+																color: "white",
+															}}
 															color="white"
 															bgColor="black"
 															required

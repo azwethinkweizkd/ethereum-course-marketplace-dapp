@@ -65,8 +65,6 @@ const ServiceAgreement = ({ agreement, onStatusChange, onPaymentRequest }) => {
 			const tx = await onStatusChange(agreementAddress, selection.target.value);
 			const results = await tx.wait();
 
-			console.log(tx, results);
-
 			if (results.status === 1) {
 				setSelectedAgreementStatus(selection);
 			} else {
@@ -198,7 +196,7 @@ const ServiceAgreement = ({ agreement, onStatusChange, onPaymentRequest }) => {
 												isDisabled={agreementFulfilledOrNullified}>
 												{Object.entries(agreementStatuses).map(
 													([key, value]) => (
-														<option value={parseInt(key)} key={key}>
+														<option value={key} key={key}>
 															{value}
 														</option>
 													)
