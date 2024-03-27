@@ -38,6 +38,7 @@
 		"@testing-library/jest-dom": "6.4.2",
 		"@testing-library/react": "14.2.2",
 		"@testing-library/user-event": "14.5.2",
+		"alchemy-sdk": "^3.2.0",
 		"buffer": "^6.0.3",
 		"ethers": "^5.0.0",
 		"formik": "^2.4.5",
