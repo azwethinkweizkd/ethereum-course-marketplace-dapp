@@ -1,8 +1,6 @@
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { HStack, Text } from "@chakra-ui/react";
 
-import "./shine.css";
-
 const StarRatingDisplay = ({ rating }) => {
 	const fullStars = Math.floor(rating);
 	const hasHalfStar = rating % 1 !== 0;
