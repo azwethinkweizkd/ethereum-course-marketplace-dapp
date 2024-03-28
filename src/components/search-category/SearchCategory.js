@@ -12,7 +12,24 @@ const SearchCategory = ({ category, onClick }) => {
 			cursor="pointer"
 			fontWeight="bold"
 			fontSize={18}
-			_hover={{ textDecoration: "underline" }}>
+			color="white"
+			style={{ position: "relative" }}
+			_before={{
+				content: '""',
+				position: "absolute",
+				width: "100%",
+				height: "4px",
+				borderRadius: "4px",
+				backgroundColor: "white",
+				bottom: -1,
+				left: 0,
+				transformOrigin: "right",
+				transform: "scaleX(0)",
+				transition: "transform .3s ease-in-out",
+			}}
+			_hover={{
+				"&::before": { transformOrigin: "left", transform: "scaleX(1)" },
+			}}>
 			{category}
 		</Text>
 	);

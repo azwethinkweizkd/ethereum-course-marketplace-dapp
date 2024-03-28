@@ -11,6 +11,7 @@ const DashboardPage = () => {
 	const [searchCriteria, setSearchCriteria] = useState("");
 
 	function onSubmitSearch() {
+		if (!searchCriteria) return;
 		navigate(`service-providers?search=${searchCriteria}`);
 	}
 
@@ -56,23 +57,24 @@ const DashboardPage = () => {
 							<SearchIcon color="green.500" onClick={onSubmitSearch} />
 						</InputRightElement>
 					</InputGroup>
-				</VStack>
-				<Box pt={8}>
-					<HStack>
-						<SearchCategory
-							category={"All"}
-							key={0}
-							onClick={onSearchCategoryClick}
-						/>
-						{Object.entries(serviceCategories).map(([key, value]) => (
+
+					<Box pt={4}>
+						<HStack>
 							<SearchCategory
-								category={value}
-								key={key}
+								category={"All"}
+								key={0}
 								onClick={onSearchCategoryClick}
 							/>
-						))}
-					</HStack>
-				</Box>
+							{Object.entries(serviceCategories).map(([key, value]) => (
+								<SearchCategory
+									category={value}
+									key={key}
+									onClick={onSearchCategoryClick}
+								/>
+							))}
+						</HStack>
+					</Box>
+				</VStack>
 			</VStack>
 		</Center>
 	);
