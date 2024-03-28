@@ -16,6 +16,7 @@ const App = () => {
 	const [existingServiceProvider, setExistingServiceProvider] = useState(null);
 	const { wallet } = useWallet();
 	const ethereumApi = useEthereum();
+
 	useEffect(() => {
 		async function getServiceProvider(api) {
 			return await api.current.getServiceProvider(wallet?.accounts[0]);

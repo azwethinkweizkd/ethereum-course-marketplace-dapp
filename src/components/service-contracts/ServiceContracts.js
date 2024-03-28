@@ -29,6 +29,8 @@ import {
 	agreementStatusColors,
 } from "../../common/constants";
 
+import "./index.css";
+
 const ServiceContract = ({
 	agreement,
 	onApproval,
