@@ -309,7 +309,6 @@ const ServiceContract = ({
 													{[...Array(5)].map((_, index) => {
 														const ratingValue = index + 1;
 														let uniqueKey = uuidv4();
-														console.log(uniqueKey);
 														return (
 															<FaStar
 																key={uniqueKey}
